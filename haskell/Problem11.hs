@@ -36,9 +36,7 @@ rowHorizontal :: [[a]] -> Int -> Int -> Maybe [a]
 rowHorizontal lst startX startY =
     let coords = map (addCoordinates startX startY) coordinatesHorizontal
         maybes = map (uncurry (indexGrid lst)) coords
-    in if (all isJust maybes)
-           then Just $ catMaybes maybes
-           else Nothing
+    in sequence maybes
 
 main :: IO ()
 main = do
