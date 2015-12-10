@@ -15,6 +15,9 @@ gridWidth = 20
 coordinatesHorizontal :: [(Int,Int)]
 coordinatesHorizontal = [(0,i) | i <- [0..3]]
 
+coordinatesVertical :: [(Int,Int)]
+coordinatesVertical = [(i,0) | i <- [0..3]]
+
 partition :: Int -> [a] -> [[a]]
 partition _ [] = []
 partition n lst = (take n lst) : partition n (drop n lst)
@@ -32,11 +35,18 @@ indexGrid lst x y = lst !? x >>= (!? y)
 addCoordinates :: Int -> Int -> (Int,Int) -> (Int,Int)
 addCoordinates x y (i,j) = (i+x, j+y)
 
-rowHorizontal :: [[a]] -> Int -> Int -> Maybe [a]
-rowHorizontal lst startX startY =
-    let coords = map (addCoordinates startX startY) coordinatesHorizontal
-        maybes = map (uncurry (indexGrid lst)) coords
+rowGeneric :: [(Int,Int)] -> [[a]] -> Int -> Int -> Maybe [a]
+rowGeneric coords lst startX startY =
+    let indexByTuple = uncurry (indexGrid lst)
+        coords' = map (addCoordinates startX startY) coords
+        maybes = map indexByTuple coords'
     in sequence maybes
+
+rowHorizontal :: [[a]] -> Int -> Int -> Maybe [a]
+rowHorizontal = rowGeneric coordinatesHorizontal
+
+rowVertical :: [[a]] -> Int -> Int -> Maybe [a]
+rowVertical = rowGeneric coordinatesVertical
 
 main :: IO ()
 main = do
