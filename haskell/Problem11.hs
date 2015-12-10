@@ -26,13 +26,16 @@ partition n lst = (take n lst) : partition n (drop n lst)
 lst !? i | i < length lst = Just $ lst !! i
          | otherwise      = Nothing
 
+indexGrid :: [[a]] -> Int -> Int -> Maybe a
+indexGrid lst x y = lst !? x >>= (!? y)
+
+addCoordinates :: Int -> Int -> (Int,Int) -> (Int,Int)
+addCoordinates x y (i,j) = (i+x, j+y)
+
 rowHorizontal :: [[a]] -> Int -> Int -> Maybe [a]
-rowHorizontal lst x y =
-    let maybes = [ lst !? x >>= (!? y)
-                 , lst !? x >>= (!? (y + 1))
-                 , lst !? x >>= (!? (y + 2))
-                 , lst !? x >>= (!? (y + 3))
-                 ]
+rowHorizontal lst startX startY =
+    let coords = map (addCoordinates startX startY) coordinatesHorizontal
+        maybes = map (uncurry (indexGrid lst)) coords
     in if (all isJust maybes)
            then Just $ catMaybes maybes
            else Nothing
