@@ -23,8 +23,8 @@ partition n lst = (take n lst) : partition n (drop n lst)
 
 (!?) :: [a] -> Int -> Maybe a
 [] !? i = Nothing
-lst !? i | i < length lst = Just $ lst !! i
-         | otherwise      = Nothing
+lst !? i | i >= 0 && i < length lst = Just $ lst !! i
+         | otherwise                = Nothing
 
 indexGrid :: [[a]] -> Int -> Int -> Maybe a
 indexGrid lst x y = lst !? x >>= (!? y)
