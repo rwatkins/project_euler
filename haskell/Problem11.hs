@@ -64,12 +64,10 @@ rowDiagonalBackward :: [[a]] -> Int -> Int -> Maybe [a]
 rowDiagonalBackward = rowGeneric coordinatesDiagonalBackward
 
 rowsFromGrid :: [[Int]] -> [[Int]]
-rowsFromGrid grid = catMaybes . concat $
-    [ [rowHorizontal grid x y | x <- [0..19], y <- [0..19]]
-    , [rowVertical grid x y | x <- [0..19], y <- [0..19]]
-    , [rowDiagonalForward grid x y | x <- [0..19], y <- [0..19]]
-    , [rowDiagonalBackward grid x y | x <- [0..19], y <- [0..19]]
-    ]
+rowsFromGrid grid =
+    let fs = [ rowHorizontal, rowVertical, rowDiagonalForward, rowDiagonalBackward ]
+        maybes = concat $ map (\f -> [f grid x y | x <- [0..19], y <- [0..19]]) fs
+    in catMaybes maybes
 
 maxProduct :: [[Int]] -> Int
 maxProduct = maximum . map product
