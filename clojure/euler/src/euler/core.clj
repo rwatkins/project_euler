@@ -1,6 +1,6 @@
 (ns euler.core
-  (:require euler.problem13))
+  (:require euler.problem14))
 
 (defn -main [& args]
   (println "Project Euler")
-  (euler.problem13/run))
+  (euler.problem14/run))
