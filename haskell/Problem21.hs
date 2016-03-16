@@ -2,9 +2,6 @@ module Main where
 
 import qualified Data.Map as Map
 
-readInt :: String -> Int
-readInt = read
-
 theNumber :: Integer
 theNumber = 220
 
